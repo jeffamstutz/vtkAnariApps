@@ -43,7 +43,11 @@ struct IdleCallback : vtkCommand
 
 int main(int argc, char *argv[])
 {
+#if 1
+  vtkLogger::SetStderrVerbosity(vtkLogger::Verbosity::VERBOSITY_ERROR);
+#else
   vtkLogger::SetStderrVerbosity(vtkLogger::Verbosity::VERBOSITY_WARNING);
+#endif
 
   vtkNew<vtkOBJReader> reader;
   reader->SetFileName(argv[1]);
