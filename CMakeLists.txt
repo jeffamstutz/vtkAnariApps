@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(anariTutorialVTK)
+project(anariViewerVTK)
 
 enable_language(CXX)
 
@@ -24,7 +24,7 @@ find_package(VTK REQUIRED COMPONENTS
   RenderingAnari
 )
 
-add_executable(${PROJECT_NAME} anariTutorialVTK.cpp)
+add_executable(${PROJECT_NAME} anariViewerVTK.cpp)
 target_link_libraries(${PROJECT_NAME} anari::anari ${VTK_LIBRARIES}) #util)
 target_include_directories(${PROJECT_NAME} PRIVATE ../util)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../external)
