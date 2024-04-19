@@ -15,6 +15,8 @@
 // anari
 #include "anari/anari_cpp.hpp"
 #include "anari/anari_cpp/ext/linalg.h"
+// std
+#include <chrono>
 
 using namespace anari::math;
 
@@ -31,11 +33,11 @@ struct IdleCallback : vtkCommand
       unsigned long vtkNotUsed(eventId),
       void *vtkNotUsed(callData))
   {
+    auto start = std::chrono::steady_clock::now();
     renderWindow->Render();
-#if 0
-    static int cnt = 0;
-    std::cout << cnt++ << '\n';
-#endif
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration<float>(end - start).count();
+    printf("frame time: %fms\n", duration * 1000);
   }
 
   vtkRenderWindow *renderWindow;
