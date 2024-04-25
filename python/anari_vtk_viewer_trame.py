@@ -74,7 +74,7 @@ class Cone:
         renderWindow = vtkRenderWindow()
 
         anariPass = vtkAnariPass()
-        vtkAnariRendererNode.SetLibraryName("visrtx", renderer)
+        vtkAnariRendererNode.SetLibraryName("environment", renderer)
         vtkAnariRendererNode.SetSamplesPerPixel(16, renderer)
         vtkAnariRendererNode.SetLightFalloff(.5, renderer)
         vtkAnariRendererNode.SetUseDenoiser(1, renderer)
