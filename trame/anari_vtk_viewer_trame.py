@@ -34,25 +34,34 @@ class Viewer:
         self.server.cli.add_argument('-l', '--anariLibrary', default='environment')
         self._vtk_rw = self._vtk_setup()
         self.ui = self._generate_ui()
-        self.ctrl.on_client_connected.add_task(self._render_loop)
+        #self.ctrl.on_client_connected.add_task(self._render_loop)
 
     @property
     def ctrl(self):
         return self.server.controller
 
-    @property
-    def state(self):
-        return self.server.state
+    @change("ambient")
+    def on_ambient_change(self, ambient, **kwargs):
+        self._rendererNode.SetAmbientIntensity(ambient, self._renderer)
+        self.updateView()
+
+    @change("refinement")
+    def on_refinement_change(self, refinement, **kwargs):
+        self._rendererNode.SetSamplesPerPixel(refinement, self._renderer)
+        self.updateView()
 
     @change("denoise")
     def on_denoise_change(self, denoise, **kwargs):
         self._rendererNode.SetUseDenoiser(denoise, self._renderer)
+        self.updateView()
+
+    def updateView(self):
+        self._vtk_rw.Render()
         self.ctrl.view_update()
 
     async def _render_loop(self):
         while True:
-            self._vtk_rw.Render()
-            self.ctrl.view_update()
+            self.updateView()
             await asyncio.sleep(0.1)
 
     def _vtk_setup(self):
@@ -66,7 +75,7 @@ class Viewer:
 
         anariPass = vtkAnariPass()
         vtkAnariRendererNode.SetLibraryName(args.anariLibrary, renderer)
-        vtkAnariRendererNode.SetSamplesPerPixel(16, renderer)
+        vtkAnariRendererNode.SetSamplesPerPixel(4, renderer)
         vtkAnariRendererNode.SetLightFalloff(.5, renderer)
         vtkAnariRendererNode.SetUseDenoiser(1, renderer)
         vtkAnariRendererNode.SetAmbientSamples(1, renderer)
@@ -95,19 +104,33 @@ class Viewer:
 
     def _generate_ui(self):
         with SinglePageLayout(self.server) as layout:
-            layout.title.set_text("Trame demo")
+            layout.title.set_text("Trame ANARI Demo App")
             with layout.toolbar as toolbar:
                 toolbar.dense = True
                 vuetify.VSpacer()
-                #vuetify.VSlider(
-                #    v_model=("resolution", 6),
-                #    min=3,
-                #    max=60,
-                #    step=1,
-                #    hide_details=True,
-                #    style="max-width: 300px;",
-                #)
-                vuetify.VSwitch(v_model=("denoise", True), label="denoise", hide_details=True)
+                vuetify.VSlider(
+                    v_model=("ambient", 1.0),
+                    min=0.0,
+                    max=4.0,
+                    step=0.1,
+                    hide_details=True,
+                    label='ambient light',
+                    style="max-width: 300px;",
+                )
+                vuetify.VSlider(
+                    v_model=("refinement", 4),
+                    min=1,
+                    max=32,
+                    step=1,
+                    hide_details=True,
+                    label='refinement',
+                    style="max-width: 300px;",
+                )
+                vuetify.VSwitch(
+                    v_model=("denoise", True),
+                    label="denoise",
+                    hide_details=True
+                )
                 with vuetify.VBtn(icon=True, click=self.ctrl.view_reset_camera):
                     vuetify.VIcon("mdi-crop-free")
 
