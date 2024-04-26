@@ -27,7 +27,7 @@ import vtkmodules.vtkRenderingOpenGL2  # noqa
 
 
 @TrameApp()
-class Cone:
+class Viewer:
     def __init__(self, server_or_name=None):
         self.server = get_server(server_or_name, client_type="vue2")
         self.server.cli.add_argument('-d', '--data')
@@ -121,8 +121,8 @@ class Cone:
 
 
 def main(**kwargs):
-    cone = Cone()
-    cone.server.start(**kwargs)
+    viewer = Viewer()
+    viewer.server.start(**kwargs)
 
 
 if __name__ == "__main__":
