@@ -3,10 +3,13 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(anariViewerVTK)
+project(vtkAnariApps)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
 enable_language(CXX)
 
+find_package(anari COMPONENTS viewer)
 find_package(VTK REQUIRED COMPONENTS
   CommonColor
   CommonCore
@@ -24,7 +27,4 @@ find_package(VTK REQUIRED COMPONENTS
   RenderingAnari
 )
 
-add_executable(${PROJECT_NAME} anariViewerVTK.cpp)
-target_link_libraries(${PROJECT_NAME} anari::anari ${VTK_LIBRARIES}) #util)
-target_include_directories(${PROJECT_NAME} PRIVATE ../util)
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../external)
+add_subdirectory(cxx)
