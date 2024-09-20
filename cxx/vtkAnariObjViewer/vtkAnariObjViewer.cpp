@@ -72,9 +72,8 @@ int main(int argc, char *argv[])
   // Attach ANARI render pass
   vtkNew<vtkAnariPass> anariPass;
   ren1->SetPass(anariPass);
-  anariPass->SetupAnariDeviceFromLibrary("helide", "default", false);
+  anariPass->SetupAnariDeviceFromLibrary("environment", "default", false);
 
-  // vtkAnariRendererNode::SetLibraryName(ren1, "environment");
   vtkAnariRendererNode::SetCompositeOnGL(ren1, 1);
 
   // Create the renderwindow
