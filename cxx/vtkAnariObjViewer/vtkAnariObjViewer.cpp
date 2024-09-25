@@ -73,6 +73,8 @@ int main(int argc, char *argv[])
   vtkNew<vtkAnariPass> anariPass;
   ren1->SetPass(anariPass);
   anariPass->SetupAnariDeviceFromLibrary("environment", "default", false);
+  anariPass->SetAnariRendererSubtype("default");
+  anariPass->SetAnariRendererParameter("ambientRadiance", 1.f);
 
   vtkAnariRendererNode::SetCompositeOnGL(ren1, 1);
 
