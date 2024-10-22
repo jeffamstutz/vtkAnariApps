@@ -3,7 +3,7 @@
 
 // vtk
 #include "vtkAnariPass.h"
-#include "vtkAnariRendererNode.h"
+#include "vtkAnariSceneGraph.h"
 #include "vtkInteractorStyleTrackballCamera.h"
 #include "vtkLogger.h"
 #include "vtkNew.h"
@@ -72,11 +72,13 @@ int main(int argc, char *argv[])
   // Attach ANARI render pass
   vtkNew<vtkAnariPass> anariPass;
   ren1->SetPass(anariPass);
-  anariPass->SetupAnariDeviceFromLibrary("environment", "default", false);
-  anariPass->SetAnariRendererSubtype("default");
-  anariPass->SetAnariRendererParameter("ambientRadiance", 1.f);
+  auto &dm = anariPass->GetAnariDeviceManager();
+  auto &rm = anariPass->GetAnariRendererManager();
+  dm.SetupAnariDeviceFromLibrary("environment", "default", false);
+  rm.SetAnariRendererSubtype("default");
+  rm.SetAnariRendererParameter("ambientRadiance", 1.f);
 
-  vtkAnariRendererNode::SetCompositeOnGL(ren1, 1);
+  vtkAnariSceneGraph::SetCompositeOnGL(ren1, 1);
 
   // Create the renderwindow
   vtkNew<vtkRenderWindow> renderWindow;
