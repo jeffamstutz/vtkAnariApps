@@ -27,7 +27,7 @@ renderWindow.SetSize(800, 800)  # Set render window size
 # Create a render pass using vtkAnariPass
 anariPass = vtk.vtkAnariPass()
 ad = anariPass.GetAnariDevice()
-ad.SetupAnariDeviceFromLibrary("helide", "default")
+ad.SetupAnariDeviceFromLibrary("environment", "default")
 ar = anariPass.GetAnariRenderer()
 ar.SetParameter("ambientRadiance", 1.0)
 
