@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
   // Attach ANARI render pass
   vtkNew<vtkAnariPass> anariPass;
   ren1->SetPass(anariPass);
-  auto &dm = anariPass->GetAnariDeviceManager();
-  auto &rm = anariPass->GetAnariRendererManager();
+  auto &dm = *anariPass->GetAnariDevice();
+  auto &rm = *anariPass->GetAnariRenderer();
   dm.SetupAnariDeviceFromLibrary("environment", "default", false);
-  rm.SetAnariRendererSubtype("default");
-  rm.SetAnariRendererParameter("ambientRadiance", 1.f);
+  rm.SetSubtype("default");
+  rm.SetParameterf("ambientRadiance", 0.25f);
 
   vtkAnariSceneGraph::SetCompositeOnGL(ren1, 1);
 
